@@ -1,5 +1,10 @@
 import { db } from '../db.js';
 import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv'
+
+dotenv.config();
+
+const { JWT_SECRET_KEY } = process.env;
 
 export const getPosts = (req, res) => {
     const params = req.query.cate;
@@ -30,7 +35,7 @@ export const addPost = (req, res) => {
     
     if (!token) return res.status(401).json('Not authenticated.')
 
-    jwt.verify(token, 'jwtSecretKey', (err, userInfo) => {
+    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
         if (err) return res.status(403).json('Token is not valid.');
 
         const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
@@ -56,7 +61,7 @@ export const deletePost = (req, res) => {
     
     if (!token) return res.status(401).json('Not authenticated.')
 
-    jwt.verify(token, 'jwtSecretKey', (err, userInfo) => {
+    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
         if (err) return res.status(403).json('Token is not valid.');
 
         const { id } = req.params;
@@ -75,7 +80,7 @@ export const updatePost = (req, res) => {
     
     if (!token) return res.status(401).json('Not authenticated.')
 
-    jwt.verify(token, 'jwtSecretKey', (err, userInfo) => {
+    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
         if (err) return res.status(403).json('Token is not valid.');
 
         const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? WHERE `id` = ? AND `uid` = ?';
