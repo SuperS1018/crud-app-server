@@ -1,22 +1,35 @@
 import { db } from '../db.js';
-import jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv'
+import { verifyAuth, getUserInfoFromToken } from './utils.js';
 
-dotenv.config();
-
-const { JWT_SECRET_KEY } = process.env;
-
-export const getPosts = (req, res) => {
+export const getPosts = async (req, res) => {
     const params = req.query.cate;
-    const query = params ?
-    'SELECT * FROM posts WHERE cate = ?':
-    'SELECT * FROM posts';
+    const userInfo = await getUserInfoFromToken(req); 
 
-    db.query(query, [params], (err, data) => {
-        if (err) return res.status(500).json(err);
+    if (userInfo) {
+        const query = params ?
+        'SELECT * FROM posts WHERE cate = ?':
+        'SELECT * FROM posts';
+    
+        db.query(query, [params], (err, data) => {
+            if (err) return res.status(500).json(err);
+    
+            return res.status(200).json(data);
+        });
+    } else {
+        const query = params ?
+        'SELECT * FROM posts WHERE cate = ? AND status = ?':
+        'SELECT * FROM posts WHERE status = ?'
 
-        return res.status(200).json(data);
-    });
+        const values = params ? 
+        [params, 'publish']:
+        ['publish']
+    
+        db.query(query, values, (err, data) => {
+            if (err) return res.status(500).json(err);
+    
+            return res.status(200).json(data);
+        });
+    }
 };
 
 export const getPost = (req, res) => {
@@ -31,13 +44,7 @@ export const getPost = (req, res) => {
 };
 
 export const addPost = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
         const values = [
             req.body.title,
@@ -57,13 +64,7 @@ export const addPost = (req, res) => {
 };
 
 export const deletePost = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const { id } = req.params;
         const query = 'DELETE FROM posts WHERE `id` = ? AND `uid` = ?';
 
@@ -76,13 +77,7 @@ export const deletePost = (req, res) => {
 };
 
 export const updatePost = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? WHERE `id` = ? AND `uid` = ?';
         const values = [
             req.body.title,

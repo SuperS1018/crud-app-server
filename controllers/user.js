@@ -1,10 +1,5 @@
 import { db } from '../db.js';
-import jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv'
-
-dotenv.config();
-
-const { JWT_SECRET_KEY } = process.env;
+import { verifyAuth } from './utils.js';
 
 export const getUsers = (req, res) => {
     const query = 'SELECT `username`, `email`, `img` FROM users';
@@ -28,13 +23,7 @@ export const getUser = (req, res) => {
 };
 
 export const addUser = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
         const values = [
             req.body.title,
@@ -54,13 +43,7 @@ export const addUser = (req, res) => {
 };
 
 export const deleteUser = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const { id } = req.params;
         const query = 'DELETE FROM users WHERE `id` = ?';
 
@@ -73,13 +56,7 @@ export const deleteUser = (req, res) => {
 };
 
 export const updateUser = (req, res) => {
-    const token = req.cookies.access_token;
-    
-    if (!token) return res.status(401).json('Not authenticated.')
-
-    jwt.verify(token, JWT_SECRET_KEY, (err, userInfo) => {
-        if (err) return res.status(403).json('Token is not valid.');
-
+    verifyAuth(req, (userInfo) => {
         const query = 'UPDATE users SET `username` = ?, `email` = ?, `img` = ? WHERE `id` = ?';
         const values = [
             req.body.username,
