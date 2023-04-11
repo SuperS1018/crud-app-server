@@ -1,9 +1,11 @@
-import { db } from '../db.js';
+import { db, handleDisconnect } from '../db.js';
 import { verifyAuth, getUserInfoFromToken } from './utils.js';
 
 export const getPosts = async (req, res) => {
     const params = req.query.cate;
     const userInfo = await getUserInfoFromToken(req); 
+
+    // handleDisconnect();
 
     if (userInfo) {
         const query = params ?

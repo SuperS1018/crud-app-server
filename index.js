@@ -8,7 +8,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const { SERVER_PORT } = process.env || '8080';
+const { PORT } = process.env || '3000';
 
 const app = express();
 
@@ -34,6 +34,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
 
-app.listen(SERVER_PORT, () => {
-    console.log(`Connected to server with port ${SERVER_PORT}`);
+app.listen(PORT, () => {
+    console.log(`Connected to server with port ${PORT}`);
 });
