@@ -23,7 +23,7 @@ export const getUser = (req, res) => {
 };
 
 export const addUser = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
         const values = [
             req.body.title,
@@ -43,7 +43,7 @@ export const addUser = (req, res) => {
 };
 
 export const deleteUser = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const { id } = req.params;
         const query = 'DELETE FROM users WHERE `id` = ?';
 
@@ -56,7 +56,7 @@ export const deleteUser = (req, res) => {
 };
 
 export const updateUser = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const query = 'UPDATE users SET `username` = ?, `email` = ?, `img` = ? WHERE `id` = ?';
         const values = [
             req.body.username,

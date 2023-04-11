@@ -44,7 +44,7 @@ export const getPost = (req, res) => {
 };
 
 export const addPost = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
         const values = [
             req.body.title,
@@ -64,7 +64,7 @@ export const addPost = (req, res) => {
 };
 
 export const deletePost = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const { id } = req.params;
         const query = 'DELETE FROM posts WHERE `id` = ? AND `uid` = ?';
 
@@ -77,7 +77,7 @@ export const deletePost = (req, res) => {
 };
 
 export const updatePost = (req, res) => {
-    verifyAuth(req, (userInfo) => {
+    verifyAuth(req, res, (userInfo) => {
         const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? WHERE `id` = ? AND `uid` = ?';
         const values = [
             req.body.title,

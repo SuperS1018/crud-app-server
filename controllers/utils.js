@@ -5,7 +5,7 @@ dotenv.config();
 
 const { JWT_SECRET_KEY } = process.env;
 
-export const verifyAuth = (req, cb) => {
+export const verifyAuth = (req, res, cb) => {
     const token = req.cookies.access_token;
     
     if (!token) return res.status(401).json('Not authenticated.')
