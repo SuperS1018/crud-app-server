@@ -10,6 +10,8 @@ dotenv.config();
 
 const { PORT } = process.env || '3000';
 
+console.log('env: ', process.env);
+
 const app = express();
 
 const storage = multer.diskStorage({

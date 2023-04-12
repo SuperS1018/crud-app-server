@@ -32,5 +32,4 @@ export const getUserInfoFromToken = (req) => {
             res(false);
         }
     });
-    
 };
