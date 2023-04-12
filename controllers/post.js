@@ -96,7 +96,7 @@ export const deletePost = (req, res) => {
 export const updatePost = (req, res) => {
     verifyAuth(req, res, (userInfo) => {
         poolConnection(res, (connection) => {
-            const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? `status` = ? WHERE `id` = ? AND `uid` = ?';
+            const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ?, `status` = ? WHERE `id` = ? AND `uid` = ?';
             const values = [
                 req.body.title,
                 req.body.desc,
