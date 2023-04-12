@@ -42,7 +42,7 @@ export const getPost = (req, res) => {
     const { id } = req.params;
 
     poolConnection(res, (connection) => {
-        const query = 'SELECT p.id, `username`, `title`, `desc`, p.img, u.img AS userImg, `cate`, `date` FROM users u JOIN posts p ON u.id = p.uid WHERE p.id = ?';
+        const query = 'SELECT p.id, `username`, `title`, `desc`, p.img, u.img AS userImg, `cate`, `status`, `date` FROM users u JOIN posts p ON u.id = p.uid WHERE p.id = ?';
     
         connection.query(query, [id], (err, data) => {
             connection.release();
@@ -56,12 +56,13 @@ export const getPost = (req, res) => {
 export const addPost = (req, res) => {
     verifyAuth(req, res, (userInfo) => {
         poolConnection(res, (connection) => {
-            const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `date`, `uid`) VALUES (?)';
+            const query = 'INSERT INTO blog.posts (`title`, `desc`, `img`, `cate`, `status`, `date`, `uid`) VALUES (?)';
             const values = [
                 req.body.title,
                 req.body.desc,
                 req.body.img,
                 req.body.cate,
+                req.body.status,
                 req.body.date,
                 userInfo.id
             ];
@@ -95,12 +96,13 @@ export const deletePost = (req, res) => {
 export const updatePost = (req, res) => {
     verifyAuth(req, res, (userInfo) => {
         poolConnection(res, (connection) => {
-            const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? WHERE `id` = ? AND `uid` = ?';
+            const query = 'UPDATE posts SET `title` = ?, `desc` = ?, `img` = ?, `cate` = ? `status` = ? WHERE `id` = ? AND `uid` = ?';
             const values = [
                 req.body.title,
                 req.body.desc,
                 req.body.img,
                 req.body.cate,
+                req.body.status,
                 req.params.id,
                 userInfo.id
             ];
