@@ -1,6 +1,12 @@
 import { poolConnection } from '../db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
+
+const { JWT_SECRET_KEY } = process.env;
+
 
 export const register = async (req, res) => {
     const { email, username, password } = req.body;
@@ -43,7 +49,7 @@ export const login = (req, res) => {
     
             if (!isPasswordCorrect) return res.status(400).json('Wrong username or password');
     
-            const token = jwt.sign({ id: data[0].id }, 'jwtSecretKey');
+            const token = jwt.sign({ id: data[0].id }, JWT_SECRET_KEY);
     
             const { password, ...other } = data[0];
             res.cookie('access_token', token, {
