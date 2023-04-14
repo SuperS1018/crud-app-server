@@ -18,8 +18,9 @@ export const upload = async (req, res) => {
   const filename = `${Date.now()}_${req.files.file.name}`;
   const params = {
     Bucket: "cdn-buckets",
-    Key: `avatar-images/${filename}`,
-    Body: req.files.file.data
+    Key: `${filename}`,
+    Body: req.files.file.data,
+    ACL: 'public-read'
   };
   
   try {
