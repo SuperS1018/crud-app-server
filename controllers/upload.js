@@ -4,12 +4,12 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const s3Client = new S3Client({
-    endpoint: "https://sfo3.digitaloceanspaces.com",
+    endpoint: process.env.SPACES_ENDPOINT,
     forcePathStyle: false,
     region: "sfo3",
     credentials: {
-      accessKeyId: "DO00RFYLG6JMDKTAXKKB",
-      secretAccessKey: process.env.SPACES_SECRET
+      accessKeyId: process.env.SPACES_KEY_ID,
+      secretAccessKey: process.env.SPACES_SECRET_KEY
     }
 });
 
