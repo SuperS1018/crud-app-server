@@ -1,9 +1,6 @@
 import { poolConnection } from '../db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 const { JWT_SECRET_KEY } = process.env;
 

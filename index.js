@@ -5,9 +5,6 @@ import userRoutes from './routes/users.js';
 import postRoutes from './routes/posts.js';
 import cookieParser from "cookie-parser";
 import { upload } from "./controllers/upload.js";
-import * as dotenv from 'dotenv';
-
-dotenv.config();
 
 const { PORT } = process.env || '3000';
 
